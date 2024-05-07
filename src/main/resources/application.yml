@@ -5,3 +5,5 @@ spring:
     active: prod
   config:
     import: http://config-server.glue-service.svc.cluster.local:8888
+jwt:
+  secret: ZOs2kmQNdL/+yB4bI63AuIujKFOWzZJaHKq+kWCcZBE=

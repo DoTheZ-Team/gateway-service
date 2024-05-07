@@ -25,12 +25,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set environment yml file
-        run: |
-          echo "jwt:" >> ./src/main/resources/application.yml
-          echo "  secret: ${{ secrets.JWT_SECRET }}" >> ./src/main/resources/application.yml
-        shell: bash
-
       - name: Build with Gradle
         run: ./gradlew build -i
         

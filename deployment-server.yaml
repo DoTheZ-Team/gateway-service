@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: glue-gateway
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: glue-gateway
+  template:
+    metadata:
+      labels:
+        app: glue-gateway
+    spec:
+      containers:
+        - image: gcu-dudezi-dev.kr-central-2.kcr.dev/glue-repository/glue-gateway:latest
+          name: glue-gateway-server
+          ports:
+            - containerPort: 8085
+      imagePullSecrets:
+        - name: glue-repository

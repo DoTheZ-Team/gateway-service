@@ -4,4 +4,4 @@ spring:
   profiles:
     active: dev
   config:
-    import: optional:configserver:http://localhost:8888
+    import: http://config-server.glue-service.svc.cluster.local:8888

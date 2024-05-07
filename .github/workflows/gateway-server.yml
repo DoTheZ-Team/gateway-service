@@ -62,7 +62,7 @@ jobs:
 
       - name: Update image in deployment file
         run: |
-          yq e '.spec.template.spec.containers[0].image = "${{ secrets.GLUE_PROJECT }}/glue-repository/glue-gateway:${{ github.sha }}"' ./k8s-template/gateway-deploy.yaml -i
+          yq e '.spec.template.spec.containers[0].image = "${{ secrets.GLUE_PROJECT }}/glue-repository/glue-gateway:${{ github.sha }}"' ./k8s-template/gateway-deployment.yaml -i
 
       - name: Commit and Push changes
         run: |

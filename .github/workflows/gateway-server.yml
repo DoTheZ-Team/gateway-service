@@ -27,8 +27,8 @@ jobs:
 
       - name: Set environment yml file
         run: |
-          cd ./src/main/resources
-          echo "${{ secrets.JWT_SECRET }}" >> ./application.yml
+          echo "jwt:" >> ./src/main/resources/application.yml
+          echo "  secret: ${{ secrets.JWT_SECRET }}" >> ./src/main/resources/application.yml
         shell: bash
 
       - name: Build with Gradle

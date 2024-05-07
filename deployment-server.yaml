@@ -14,7 +14,7 @@ spec:
         app: glue-gateway
     spec:
       containers:
-        - image: gcu-dudezi-dev.kr-central-2.kcr.dev/glue-repository/glue-gateway:latest
+        - image: gcu-dudezi-dev.kr-central-2.kcr.dev/glue-repository/glue-gateway:02951c4230101f6d598199b3b78d48de588fa592
           name: glue-gateway-server
           ports:
             - containerPort: 8085

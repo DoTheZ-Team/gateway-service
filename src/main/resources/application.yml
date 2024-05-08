@@ -4,4 +4,4 @@ spring:
   profiles:
     active: prod
   config:
-    import: optional:configserver:http://config-server.glue-service.svc.cluster.local:8888
+    import: optional:configserver:http://glue-config.glue-service.svc.cluster.local:8888

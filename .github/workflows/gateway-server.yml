@@ -3,8 +3,6 @@ name: Glue Gateway Server CI/CD
 on:
   push:
     branches: [ "main" ]
-    paths-ignore:
-      - 'deployment-server.yaml'
   pull_request:
     branches: [ "main" ]
 
@@ -14,7 +12,6 @@ permissions:
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
-    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,6 +21,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Set environment yml file
+        run: |
+          echo "jwt:" >> ./src/main/resources/application.yml
+          echo "  secret: ${{ secrets.JWT_SECRET }}" >> ./src/main/resources/application.yml
+        shell: bash
 
       - name: Build with Gradle
         run: ./gradlew build
@@ -47,10 +50,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-push-image
     steps:
-      - name: Checkout glue-config repository
+      - name: Checkout glue-msa-config repository
         uses: actions/checkout@v3
         with:
-          repository: ${{ secrets.GIT_PROJECT }}/gateway-service
+          repository: ${{ secrets.GIT_PROJECT }}/glue-msa-config
           token: ${{ secrets.GIT_TOKEN}}
           ref: "main"
 
@@ -59,7 +62,7 @@ jobs:
 
       - name: Update image in deployment file
         run: |
-          yq e '.spec.template.spec.containers[0].image = "${{ secrets.GLUE_PROJECT }}/glue-repository/glue-gateway:${{ github.sha }}"' ./deployment-server.yaml -i
+          yq e '.spec.template.spec.containers[0].image = "${{ secrets.GLUE_PROJECT }}/glue-repository/glue-gateway:${{ github.sha }}"' ./k8s-template/gateway-deployment.yaml -i
 
       - name: Commit and Push changes
         run: |
@@ -67,5 +70,5 @@ jobs:
           git config --global user.name "${{ secrets.USERNAME }}"
           git add .
           git commit -m "[skip ci] Update deployment-server.yaml"
-          git remote set-url origin https://${{ secrets.GIT_TOKEN }}@github.com/DoTheZ-Team/gateway-service
-          git push --set-upstream origin HEAD
+          git remote set-url origin https://${{ secrets.GIT_TOKEN }}@github.com/${{ secrets.GIT_PROJECT }}/glue-msa-config
+          git push --set-upstream origin main

@@ -37,7 +37,8 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
             if (requestUrl.startsWith("/auths/v3/api-docs") ||
                     requestUrl.startsWith("/blogs/v3/api-docs") ||
-                    requestUrl.startsWith("/posts/v3/api-docs")) {
+                    requestUrl.startsWith("/posts/v3/api-docs") ||
+                    requestUrl.startsWith("/auths/login")){
                 return chain.filter(exchange);
             }
 

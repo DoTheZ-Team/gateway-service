@@ -1,6 +1,7 @@
 package com.justdo.glue.gateway.filter;
 
 import com.justdo.glue.gateway.utils.JwtTokenProvider;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -12,10 +13,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
-
 @Component
-public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
+public class AuthorizationHeaderFilter extends
+        AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -38,9 +38,9 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             if (requestUrl.startsWith("/auths/v3/api-docs") ||
                     requestUrl.startsWith("/blogs/v3/api-docs") ||
                     requestUrl.startsWith("/posts/v3/api-docs") ||
-                    requestUrl.startsWith("/stickers/v3/api-docs")||
+                    requestUrl.startsWith("/stickers/v3/api-docs") ||
                     requestUrl.startsWith("/recommends/openapi.json") ||
-                    requestUrl.startsWith("/auths/login")){
+                    requestUrl.startsWith("/auths/login")) {
                 return chain.filter(exchange);
             }
 
@@ -48,7 +48,8 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
                 return onError(exchange, "no authorization header");
             }
 
-            String authorizationHeader = Objects.requireNonNull(request.getHeaders().get(HttpHeaders.AUTHORIZATION)).get(0);
+            String authorizationHeader = Objects.requireNonNull(
+                    request.getHeaders().get(HttpHeaders.AUTHORIZATION)).get(0);
             String jwt = authorizationHeader.replace("Bearer", "").trim();
 
             if (!jwtTokenProvider.isTokenValid(jwt)) {

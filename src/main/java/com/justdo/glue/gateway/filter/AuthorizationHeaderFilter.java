@@ -40,7 +40,9 @@ public class AuthorizationHeaderFilter extends
                     requestUrl.startsWith("/posts/v3/api-docs") ||
                     requestUrl.startsWith("/stickers/v3/api-docs") ||
                     requestUrl.startsWith("/recommends/openapi.json") ||
-                    requestUrl.startsWith("/auths/login")) {
+                    requestUrl.startsWith("/auths/login") ||
+                    requestUrl.matches("^/posts/\\d+$") ||
+                    requestUrl.matches("^/blogs/\\d+$")) {
                 return chain.filter(exchange);
             }
 
